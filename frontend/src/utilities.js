@@ -1,23 +1,39 @@
+/**
+ * YogaVision AI - Utility Functions
+ * Author: Priyanshu Pattnaik
+ * Description: Helper functions for pose detection and visualization
+ */
+
 import * as posenet from "@tensorflow-models/posenet";
 import * as tf from "@tensorflow/tfjs";
 
-const color = "aqua";
-const boundingBoxColor = "red";
-const lineWidth = 2;
+// Visual styling constants
+const COLOR = "aqua";
+const BOUNDING_BOX_COLOR = "red";
+const LINE_WIDTH = 2;
 
 export const tryResNetButtonName = "tryResNetButton";
 export const tryResNetButtonText = "[New] Try ResNet50";
 const tryResNetButtonTextCss = "width:100%;text-decoration:underline;";
 const tryResNetButtonBackgroundCss = "background:#e61d5f;";
 
+/**
+ * Detect if the user is on an Android device
+ */
 function isAndroid() {
   return /Android/i.test(navigator.userAgent);
 }
 
+/**
+ * Detect if the user is on an iOS device
+ */
 function isiOS() {
   return /iPhone|iPad|iPod/i.test(navigator.userAgent);
 }
 
+/**
+ * Check if the user is on a mobile device
+ */
 export function isMobile() {
   return isAndroid() || isiOS();
 }
@@ -64,6 +80,9 @@ function toTuple({ y, x }) {
   return [y, x];
 }
 
+/**
+ * Draw a point on the canvas (represents a body keypoint)
+ */
 export function drawPoint(ctx, y, x, r, color) {
   ctx.beginPath();
   ctx.arc(x, y, r, 0, 2 * Math.PI);
@@ -72,19 +91,19 @@ export function drawPoint(ctx, y, x, r, color) {
 }
 
 /**
- * Draws a line on a canvas, i.e. a joint
+ * Draw a line segment on the canvas (represents a connection between joints)
  */
 export function drawSegment([ay, ax], [by, bx], color, scale, ctx) {
   ctx.beginPath();
   ctx.moveTo(ax * scale, ay * scale);
   ctx.lineTo(bx * scale, by * scale);
-  ctx.lineWidth = lineWidth;
+  ctx.lineWidth = LINE_WIDTH;
   ctx.strokeStyle = color;
   ctx.stroke();
 }
 
 /**
- * Draws a pose skeleton by looking up all adjacent keypoints/joints
+ * Draw the complete pose skeleton by connecting adjacent keypoints
  */
 export function drawSkeleton(keypoints, minConfidence, ctx, scale = 1) {
   const adjacentKeyPoints = posenet.getAdjacentKeyPoints(
@@ -96,7 +115,7 @@ export function drawSkeleton(keypoints, minConfidence, ctx, scale = 1) {
     drawSegment(
       toTuple(keypoints[0].position),
       toTuple(keypoints[1].position),
-      color,
+      COLOR,
       scale,
       ctx
     );
@@ -104,7 +123,7 @@ export function drawSkeleton(keypoints, minConfidence, ctx, scale = 1) {
 }
 
 /**
- * Draw pose keypoints onto a canvas
+ * Draw all detected keypoints on the canvas
  */
 export function drawKeypoints(keypoints, minConfidence, ctx, scale = 1) {
   for (let i = 0; i < keypoints.length; i++) {
@@ -115,14 +134,12 @@ export function drawKeypoints(keypoints, minConfidence, ctx, scale = 1) {
     }
 
     const { y, x } = keypoint.position;
-    drawPoint(ctx, y * scale, x * scale, 3, color);
+    drawPoint(ctx, y * scale, x * scale, 3, COLOR);
   }
 }
 
 /**
- * Draw the bounding box of a pose. For example, for a whole person standing
- * in an image, the bounding box will begin at the nose and extend to one of
- * ankles
+ * Draw a bounding box around the detected pose
  */
 export function drawBoundingBox(keypoints, ctx) {
   const boundingBox = posenet.getBoundingBox(keypoints);
@@ -134,7 +151,7 @@ export function drawBoundingBox(keypoints, ctx) {
     boundingBox.maxY - boundingBox.minY
   );
 
-  ctx.strokeStyle = boundingBoxColor;
+  ctx.strokeStyle = BOUNDING_BOX_COLOR;
   ctx.stroke();
 }
 

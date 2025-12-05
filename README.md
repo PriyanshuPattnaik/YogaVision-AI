@@ -1,6 +1,6 @@
 # YogaVision AI
 
-An intelligent yoga pose detection and correction system powered by machine learning and computer vision. YogaVision AI uses real-time pose estimation to help users perfect their yoga practice with instant feedback and performance tracking.
+An intelligent yoga pose detection and correction system powered by machine learning and computer vision. Using real-time pose estimation, this application helps users perfect their yoga practice with instant feedback and performance tracking.
 
 **Developed by:** Priyanshu Pattnaik
 

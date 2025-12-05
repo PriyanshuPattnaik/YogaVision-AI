@@ -1,7 +1,7 @@
 {
   "name": "yogavision-ai",
   "version": "1.0.0",
-  "description": "AI-powered yoga pose detection and correction system",
+  "description": "Real-time yoga pose detection system using AI and computer vision",
   "author": "Priyanshu Pattnaik",
   "private": true,
   "workspaces": [
